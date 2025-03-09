@@ -19,6 +19,7 @@ export class PhotoService {
 
   // Metodo agregar nuevo
   public async addNewToGallery() {
+    this.photos = [];
     // Take a photo
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,

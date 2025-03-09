@@ -8,7 +8,21 @@ import { ActionSheetController } from '@ionic/angular';
   standalone: false,
 })
 export class Tab2Page {
-
+  nameUser!: string;
+  alertButtons = [
+    {
+      text: "actualizar",
+      handler: (data: { Nombre: string; }) => {
+        this.setName(data.Nombre);
+      }
+    }
+  ]
+  alertInputs = [
+    {
+      name: "Nombre",
+      placeholder: "ingrese el nombre nuevo"
+    }
+  ]
   constructor(public photoService: PhotoService,
     public actionSheetController: ActionSheetController) {}
 
@@ -42,6 +56,10 @@ export class Tab2Page {
       }]
     });
     await actionSheet.present();
+  }
+
+  setName(name: string){
+    this.nameUser = name;
   }
 
   

@@ -12,17 +12,39 @@
       <ion-title size="large">Galeria de fotos</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="chevron-up-circle"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
     <ion-fab-button (click)="addPhotoToGallery()">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" *ngFor="let photo of photoService.photos; index as position">
+    <ion-fab-button id="changeName">
+      <ion-icon name="name"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>
+        <div id="image" size="6" *ngFor="let photo of photoService.photos; index as position">
+        <ion-avatar>
         <ion-img [src]="photo.webviewPath" (click)="showActionSheet(photo, position)"></ion-img>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        </ion-avatar>
+      </div>  
 
+      <ion-card>
+        <ion-card-content>
+          <ion-text color="primary">
+            <h1>
+              {{ nameUser }}
+            </h1>
+          </ion-text>
+        </ion-card-content>
+      </ion-card>
+      <ion-alert
+  trigger="changeName"
+  header="Please enter your info"
+  [buttons]="alertButtons"
+  [inputs]="alertInputs"
+></ion-alert>
 </ion-content>
