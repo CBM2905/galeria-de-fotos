@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { ActionSheetController } from '@ionic/angular';
+import { PhotosService } from '../photoServices/photos.service';
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -24,7 +25,7 @@ export class Tab2Page {
     }
   ]
   constructor(public photoService: PhotoService,
-    public actionSheetController: ActionSheetController) {}
+    public actionSheetController: ActionSheetController, public photosService: PhotosService) {}
 
 
   // Agregar foto
@@ -34,6 +35,8 @@ export class Tab2Page {
 
   async ngOnInit() {
     await this.photoService.loadSaved();
+    this.photosService.sharedNombre.subscribe(nombreUser => this.nameUser = nombreUser);
+    this.photosService.sharedPhoto.subscribe(photo => this.photoService.photos[0] = photo)
   }
 
   public async showActionSheet(photo: UserPhoto, position: number) {
@@ -59,8 +62,9 @@ export class Tab2Page {
   }
 
   setName(name: string){
-    this.nameUser = name;
+    this.photosService.nextNombre(name);
   }
 
+  
   
 }

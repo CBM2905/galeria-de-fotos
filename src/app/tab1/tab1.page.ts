@@ -2,6 +2,8 @@ import { Component, inject, input } from '@angular/core';
 import { Firestore, collection, addDoc, CollectionReference, collectionData, updateDoc, doc, deleteDoc } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { PhotosService } from '../photoServices/photos.service';
+import { UserPhoto } from '../services/photo.service';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -9,11 +11,14 @@ import { Observable } from 'rxjs';
   standalone: false,
 })
 export class Tab1Page {
+  photo!: UserPhoto;
+  nombreUser!: string;
   private firestore: Firestore = inject(Firestore);
   test$!: Observable<Test[]>;
-  constructor(private alertController: AlertController) {
+  constructor(private alertController: AlertController, private photoService: PhotosService) {
     const userColl = collection(this.firestore, "test");
     this.test$ = collectionData(userColl, {idField: "uid"}) as Observable<Test[]>;
+    this.setNameShared();
   }
 
   
@@ -100,6 +105,15 @@ export class Tab1Page {
     })
     await alert.present();
     
+  }
+
+  ngOnInit(){
+    this.photoService.sharedNombre.subscribe(nombreUser => this.nombreUser = nombreUser);
+    this.photoService.sharedPhoto.subscribe(photo => this.photo = photo);
+  }
+
+  setNameShared(){
+    this.photoService.nextNombre("i am");
   }
   
 }
