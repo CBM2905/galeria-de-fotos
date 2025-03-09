@@ -2,16 +2,24 @@
   <ion-toolbar>
     <ion-title>
       Nombre de usuario:  {{ nombreUser }}
+      
     </ion-title>
+    <ion-avatar slot="end">
+      <img alt="" [src]="photo[0].webviewPath" />
+    </ion-avatar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 12</ion-title>
+      <ion-title size="large">Nombre: {{ nombreUser }} </ion-title>
+      <ion-avatar slot="end">
+        <img alt="" [src]="photo[0].webviewPath" />
+      </ion-avatar>
     </ion-toolbar>
   </ion-header>
+  
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" >
     <ion-fab-button id="create">
       <ion-icon name="add"></ion-icon>
@@ -19,7 +27,7 @@
   </ion-fab>
   <ion-alert
   trigger="create"
-  header="Please enter your info"
+  header="Ingrese un nuevo paciente"
   [buttons]="alertButtons"
   [inputs]="alertInputs"
 ></ion-alert>
@@ -38,10 +46,7 @@
     </ion-item-options>
   </ion-item-sliding>
 </ion-list>
-  <ul>
-    <li *ngFor="let test of test$ | async">
-        {{test.Nombre}}
-    </li>
-</ul>
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+
+
+  
 </ion-content>

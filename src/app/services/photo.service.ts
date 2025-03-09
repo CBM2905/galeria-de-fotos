@@ -4,6 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 import { Platform } from '@ionic/angular';
+import { PhotosService } from '../photoServices/photos.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +19,7 @@ export class PhotoService {
 
 
   // Metodo agregar nuevo
-  public async addNewToGallery() {
+  public async addNewToGallery(photosService: PhotosService) {
     this.photos = [];
     // Take a photo
     const capturedPhoto = await Camera.getPhoto({
@@ -34,8 +35,10 @@ export class PhotoService {
       key: this.PHOTO_STORAGE,
       value: JSON.stringify(this.photos),
     });
+    console.log("aqui");
     console.log(this.photos);
 
+    photosService.nextPhoto(this.photos)
   }
 
   // Persistence of data images
@@ -117,7 +120,7 @@ export class PhotoService {
   }
   }
 
-  public async deletePicture(photo: UserPhoto, position: number) {
+  public async deletePicture(photo: UserPhoto, position: number, photos: PhotosService) {
     // Remove this photo from the Photos reference data array
     this.photos.splice(position, 1);
   
@@ -135,7 +138,9 @@ export class PhotoService {
       path: filename,
       directory: Directory.Data
     });
+    photos.nextPhoto([{filepath: "none", webviewPath:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRogTtOMPG5E_dGwITV6PsDJGAzJWZKQxIcZQ&s"}]);
   }
+
 
 
 }

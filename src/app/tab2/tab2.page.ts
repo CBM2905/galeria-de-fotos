@@ -30,13 +30,13 @@ export class Tab2Page {
 
   // Agregar foto
   addPhotoToGallery() {
-    this.photoService.addNewToGallery();
+    this.photoService.addNewToGallery(this.photosService);
   }
 
   async ngOnInit() {
     await this.photoService.loadSaved();
     this.photosService.sharedNombre.subscribe(nombreUser => this.nameUser = nombreUser);
-    this.photosService.sharedPhoto.subscribe(photo => this.photoService.photos[0] = photo)
+    this.photosService.sharedPhoto.subscribe(photo => this.photoService.photos = photo)
   }
 
   public async showActionSheet(photo: UserPhoto, position: number) {
@@ -47,7 +47,7 @@ export class Tab2Page {
         role: 'destructive',
         icon: 'trash',
         handler: () => {
-          this.photoService.deletePicture(photo, position);
+          this.photoService.deletePicture(photo, position, this.photosService);
         }
       }, {
         text: 'Cancel',

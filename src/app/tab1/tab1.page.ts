@@ -11,7 +11,7 @@ import { UserPhoto } from '../services/photo.service';
   standalone: false,
 })
 export class Tab1Page {
-  photo!: UserPhoto;
+  photo: UserPhoto[] = [];
   nombreUser!: string;
   private firestore: Firestore = inject(Firestore);
   test$!: Observable<Test[]>;
@@ -41,7 +41,7 @@ export class Tab1Page {
 
   public alertButtons = [
     {
-      text: "confirm",
+      text: "Ingresar",
       handler: (data: any) => {
         let nombre = data.Nombre;
         let glucose = data.Glucosa
@@ -71,7 +71,7 @@ export class Tab1Page {
 
   async showUpdateAlert(info: any){
     let alert = await this.alertController.create({
-      header: "edit",
+      header: "Editar informacion",
       inputs: [
         {
           name: "Nombre",
@@ -82,12 +82,14 @@ export class Tab1Page {
         {
           name: "Glucosa",
           placeholder: info.Glucose,
-          type: "number"
+          type: "number",
+          value: info.Glucose
         },
         {
           name: "BMI",
           placeholder: info.BMI,
-           type: "number"
+          type: "number",
+          value: info.BMI
         }
       ],
       buttons: [
@@ -110,6 +112,7 @@ export class Tab1Page {
   ngOnInit(){
     this.photoService.sharedNombre.subscribe(nombreUser => this.nombreUser = nombreUser);
     this.photoService.sharedPhoto.subscribe(photo => this.photo = photo);
+    console.log(this.photo)
   }
 
   setNameShared(){
