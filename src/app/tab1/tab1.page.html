@@ -22,7 +22,7 @@
 
 <ion-list>
   <ion-item-sliding *ngFor="let test of test$ | async">
-    <ion-item>
+    <ion-item [button]="true" (click)="showPredictAlert(test)">
       {{test.Nombre}}
     </ion-item>
     <ion-item-options>

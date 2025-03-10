@@ -11,6 +11,15 @@ import { UserPhoto } from '../services/photo.service';
   standalone: false,
 })
 export class Tab1Page {
+
+  b0 = -7.8979
+  b1 = 0.0399
+  b2 = 0.0698
+  e = Math.exp(1)
+  cuttOff = 0.3109
+
+
+
   photo: UserPhoto[] = [];
   nombreUser!: string;
   private firestore: Firestore = inject(Firestore);
@@ -23,13 +32,17 @@ export class Tab1Page {
 
   
   crear(Nombre: string, Glucose: number, BMI: number){
-    addDoc(collection(this.firestore, "test"), {Nombre: Nombre, Glucose: Glucose, BMI: BMI});
+    let pxy = this.predictProbability(Glucose, BMI);
+    let res = this.scaling(pxy);
+    addDoc(collection(this.firestore, "test"), {Nombre: Nombre, Glucose: Glucose, BMI: BMI, Probabilidad: pxy, Resultado: res});
     console.log(this.test$);
   }
 
   update(Nombre: string, Glucose: number, BMI: number, uid: any){
+    let pxy = this.predictProbability(Glucose, BMI);
+    let res = this.scaling(pxy);
     let refDoc = doc(this.firestore, "test", uid);
-    updateDoc(refDoc, {Nombre: Nombre, Glucose: Glucose, BMI: BMI});
+    updateDoc(refDoc, {Nombre: Nombre, Glucose: Glucose, BMI: BMI, Probabilidad: pxy, Resultado: res});
   }
 
   delete(uid: any){
@@ -50,7 +63,7 @@ export class Tab1Page {
           id: "Glucosa",
           name: "Glucosa",
           placeholder: "Ingrese Glucosa",
-          type: "text"
+          type: "number"
         },
         {
           id: "BMI",
@@ -127,7 +140,31 @@ export class Tab1Page {
   setNameShared(){
     this.photoService.nextNombre("i am");
   }
-  
+
+
+  predictProbability(Glucose: number, BMI: number){
+    let sum = this.b0+(this.b1*Glucose)+(this.b2*BMI);
+    let pxy = (this.e**sum)/(1+(this.e**sum));
+    return pxy
+  }
+
+  scaling(pxy: number){
+    if(pxy > this.cuttOff){
+      return "Tiene diabetes"
+    }
+    return "No tiene diabetes"
+  }
+
+  async showPredictAlert(data: Test){
+    let alert = await this.alertController.create({
+      header: "Prediccion",
+      message: "Este paciente tiene " + data.Resultado + " con una probabilidad de " + data.Probabilidad
+    })
+    await alert.present();    
+  }
+
+
+
 }
 
 
@@ -135,6 +172,7 @@ export interface Test {
   Nombre: String,
   Glucose: number,
   BMI: number,
-
+  Probabilidad: number,
+  Resultado: String,
   uid: String
 }
