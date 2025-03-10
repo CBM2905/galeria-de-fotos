@@ -37,37 +37,46 @@ export class Tab1Page {
     deleteDoc(refDoc);
   }
 
+  async showCreateAlert(){
+    let alert = await this.alertController.create({
+      header: "Agregar paciente",
+      inputs: [
+        {
+          name: "Nombre",
+          placeholder: "ingrese el nombre",
+          type: "text"
+        },
+        {
+          id: "Glucosa",
+          name: "Glucosa",
+          placeholder: "Ingrese Glucosa",
+          type: "text"
+        },
+        {
+          id: "BMI",
+          name: "BMI",
+          placeholder: "indice de masa corporal",
+          type: "number"
+        }
+      ],
+      buttons: [
+        {
+          text: "Agregar",
+          handler: data => {
+            let nombre = data.Nombre;
+            let glucose = data.Glucosa;
+            let BMI = data.BMI;
+
+            this.crear(nombre,glucose,BMI);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 
 
-  public alertButtons = [
-    {
-      text: "Ingresar",
-      handler: (data: any) => {
-        let nombre = data.Nombre;
-        let glucose = data.Glucosa
-        let bmi = data.BMI;
-
-        this.crear(nombre,glucose,bmi);        
-      }       
-    }
-  ]
-  public alertInputs = [
-    {
-      name: "Nombre",
-      placeholder: "ingrese el nombre",
-      type: "string"
-    },
-    {
-      name: "Glucosa",
-      placeholder: "Ingrese Glucosa",
-      type: "number"
-    },
-    {
-      name: "BMI",
-      placeholder: "indice de masa corporal",
-      type: "number"
-    }
-  ]
+ 
 
   async showUpdateAlert(info: any){
     let alert = await this.alertController.create({
